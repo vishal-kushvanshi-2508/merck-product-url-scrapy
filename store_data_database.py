@@ -13,7 +13,7 @@ DB_CONFIG = {
     "user" : "root",
     "password" : "actowiz",
     "port" : "3306",
-    "database" : "merck_product_db"
+    "database" : "merck_product_db_2"
 }
 
 def get_connection():
@@ -31,7 +31,7 @@ def create_db():
     connection = get_connection()
     # connection = mysql.connector.connect(**DB_CONFIG)
     cursor = connection.cursor()
-    cursor.execute("CREATE DATABASE IF NOT EXISTS merck_product_db;")
+    cursor.execute("CREATE DATABASE IF NOT EXISTS merck_product_db_2;")
     connection.commit()
     connection.close()
 # create_db()
@@ -128,7 +128,7 @@ def merck_url_insert(list_data : list):
 def fetch_merck_url_table_data():
     connection = get_connection()
     cursor = connection.cursor()
-    # query = f"SELECT * FROM {merck_url_table_name} WHERE id = 413;"
+    # query = f"SELECT * FROM {merck_url_table_name} WHERE id = 414;"
 
     query = f"SELECT * FROM {merck_url_table_name} WHERE status = 'pending';"
     

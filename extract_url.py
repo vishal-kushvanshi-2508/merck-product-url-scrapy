@@ -24,7 +24,7 @@ def fetch_urls():
     )
 
     # D:\vishal_kushvanshi\scrapy\merck_product_pages\merck_main_page
-    folder_path = r"D:\vishal_kushvanshi\scrapy\merck_2_product\merck_main_page"
+    folder_path = r"D:\vishal_kushvanshi\scrapy\merck_product_pages\merck_main_page"
 
     # next_folder_path = os.path.join(folder_path, )
     os.makedirs(folder_path, exist_ok=True)
@@ -180,14 +180,15 @@ def single_category_url(product_url, start_page_num, next_url, items_data_list, 
         # ==============================
         # VALIDATE JSON BEFORE LOAD
         # ==============================
-        if not raw_json.endswith("}"):
-            print(" error Truncated JSON detected", "parent_product_id : ", parent_product_id , "start_page_num : ",start_page_num)
+        ### this is comment now........
+        # if not raw_json.endswith("}"):
+        #     print(" error Truncated JSON detected", "parent_product_id : ", parent_product_id , "start_page_num : ",start_page_num)
 
-            with open(f"{pages_path}_broken.json", "w", encoding="utf-8") as f:
-                f.write(raw_json)
+        #     with open(f"{pages_path}_broken.json", "w", encoding="utf-8") as f:
+        #         f.write(raw_json)
 
-            # update_merck_url_status(parent_product_id, "pending")
-            return error_check
+        #     # update_merck_url_status(parent_product_id, "pending")
+        #     return error_check
         
         #  Safe JSON load
         try:
@@ -250,7 +251,7 @@ def single_category_url(product_url, start_page_num, next_url, items_data_list, 
                         # continue
 
             # INSERT CHUNK
-            if len(items_data_list) >= 1500:
+            if len(items_data_list) >= 800:
                 print("1 data insert into table : ", len(items_data_list))
                 product_url_insert(items_data_list)
                 items_data_list.clear()
@@ -280,7 +281,7 @@ def single_category_url(product_url, start_page_num, next_url, items_data_list, 
 
 def child_product_url(list_data : list):
     print("-----child_product_url-----")
-    folder_path = r"D:\vishal_kushvanshi\scrapy\merck_2_product\sub_category_url_pages"
+    folder_path = r"D:\vishal_kushvanshi\scrapy\merck_product_pages\sub_category_url_pages"
     os.makedirs(folder_path, exist_ok=True)
 
     count = 1
@@ -325,7 +326,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 def worker(list_data : list):
     # pass single dict as list
     # dynamic thread tuning generate.
-    max_threads = min(12, len(list_data))   #  adjust (5–10 safe for scraping)
+    max_threads = min(8, len(list_data))   #  adjust (5–10 safe for scraping)
 
     with ThreadPoolExecutor(max_workers=max_threads) as executor:
         futures = [executor.submit(child_product_url, [data]) for data in list_data]
