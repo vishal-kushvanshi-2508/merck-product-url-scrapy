@@ -121,15 +121,16 @@ def next_page_url(parent_product_url):
 def fetch_with_retry(url, parent_product_id, start_page_num, retries=3 ):
     for attempt in range(retries):
         try:
-            response = SESSION.get(url, timeout=180)
+            response = SESSION.get(url, timeout=30)
 
             if response.status_code == 200 and "__NEXT_DATA__" in response.text:
                 return response
 
-            print(f"[Retry] Error Bad response {response.status_code} | Attempt {attempt+1}", "url :", url,  "\nparent_product_id : ", parent_product_id , "start_page_num : ",start_page_num)
+            # print(f"[Retry] Error Bad response {response.status_code} | Attempt {attempt+1}", "url :", url,  "\nparent_product_id : ", parent_product_id , "start_page_num : ",start_page_num)
 
         except Exception as e:
-            print(f"[Retry] Error Exception: {e} | Attempt {attempt+1}" , "url :", url,  "\nparent_product_id : ", parent_product_id , "start_page_num : ",start_page_num)
+            pass
+            # print(f"[Retry] Error Exception: {e} | Attempt {attempt+1}" , "url :", url,  "\nparent_product_id : ", parent_product_id , "start_page_num : ",start_page_num)
 
         # time.sleep(delay)
 
@@ -181,14 +182,14 @@ def single_category_url(product_url, start_page_num, next_url, items_data_list, 
         # VALIDATE JSON BEFORE LOAD
         # ==============================
         ### this is comment now........
-        # if not raw_json.endswith("}"):
-        #     print(" error Truncated JSON detected", "parent_product_id : ", parent_product_id , "start_page_num : ",start_page_num)
+        if not raw_json.endswith("}"):
+            print(" error Truncated JSON detected", "parent_product_id : ", parent_product_id , "start_page_num : ",start_page_num)
 
-        #     with open(f"{pages_path}_broken.json", "w", encoding="utf-8") as f:
-        #         f.write(raw_json)
+            with open(f"{pages_path}_broken.json", "w", encoding="utf-8") as f:
+                f.write(raw_json)
 
-        #     # update_merck_url_status(parent_product_id, "pending")
-        #     return error_check
+            # update_merck_url_status(parent_product_id, "pending")
+            return error_check
         
         #  Safe JSON load
         try:
@@ -251,7 +252,7 @@ def single_category_url(product_url, start_page_num, next_url, items_data_list, 
                         # continue
 
             # INSERT CHUNK
-            if len(items_data_list) >= 800:
+            if len(items_data_list) >= 500:
                 print("1 data insert into table : ", len(items_data_list))
                 product_url_insert(items_data_list)
                 items_data_list.clear()
@@ -341,4 +342,7 @@ def worker(list_data : list):
 
 
     # child_product_url([dict_data])
+
+
+
 

@@ -40,7 +40,7 @@ def main():
     # child_product_url(list_data=fetch_merck_url_list)
 
     # list_num = fetch_merck_url_list[:1]
-    # print("list_num : ", fetch_merck_url_list)
+    print("list_num : ", fetch_merck_url_list)
     print("2 list_num : ", len(fetch_merck_url_list))
     
     worker(list_data=fetch_merck_url_list)
